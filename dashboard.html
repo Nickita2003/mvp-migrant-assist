@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="mainPageTitle">Главная</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <h1 data-i18n="welcomeMessage">Добро пожаловать!</h1>
+    <div class="lang-switcher">
+      <select id="languageSelect">
+        <option value="ru">Русский</option>
+        <option value="uz">O‘zbek</option>
+        <option value="tg">Тоҷикӣ</option>
+        <option value="ky">Кыргызча</option>
+        <option value="hy">Հայերեն</option>
+        <option value="az">Azərbaycan</option>
+        <option value="en">English</option>
+        <option value="uk">Українська</option>
+        <option value="kk">Қазақ</option>
+        <option value="zh">中文</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <div class="services-grid">
+      <a href="jobs.html" class="service-card" data-i18n="jobsCard">Работа</a>
+      <a href="housing.html" class="service-card" data-i18n="housingCard">Жильё</a>
+      <a href="courses.html" class="service-card" data-i18n="coursesCard">Курсы</a>
+      <a href="legal.html" class="service-card" data-i18n="legalCard">Юридическая помощь</a>
+      <a href="community.html" class="service-card" data-i18n="communityCard">Сообщество</a>
+      <a href="emergency.html" class="service-card" data-i18n="emergencyCard">Экстренная помощь</a>
+      <a href="about.html" class="service-card" data-i18n="aboutCard">О проекте</a>
+      <a href="contacts.html" class="service-card" data-i18n="contactsCard">Контакты</a>
+    </div>
+
+    <!-- Голосовой ассистент -->
+    <div class="voice-assistant">
+      <button id="voiceBtn" data-i18n="voiceAssistantBtn">Голосовой помощник</button>
+      <div id="voiceOutput" class="voice-output"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p data-i18n="footerText">© 2025 Помощь мигрантам. Все права защищены.</p>
+    <button id="logoutBtn" data-i18n="logoutButton">Выйти</button>
+  </footer>
+
+  <script type="module" src="assets/js/modules/languageManager.js"></script>
+  <script type="module" src="assets/js/modules/voiceAssistant.js"></script>
+  <script type="module">
+    if (!localStorage.getItem('isLoggedIn')) {
+      window.location.href = 'auth.html';
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = 'auth.html';
+    });
+
+    document.getElementById('languageSelect').addEventListener('change', (e) => {
+      window.switchLanguage(e.target.value);
+    });
+  </script>
+</body>
+</html>

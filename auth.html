@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="pageTitle">Загрузка...</title>
+  <link rel="stylesheet" href="assets/css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h1 data-i18n="loginHeader">Вход</h1>
+    <form id="loginForm">
+      <input type="email" data-i18n-placeholder="emailLabel" required />
+      <input type="password" data-i18n-placeholder="passwordLabel" required />
+      <button type="submit" data-i18n="loginButton">Войти</button>
+    </form>
+
+    <div class="lang-switcher">
+      <label for="languageSelect" data-i18n="langSelectLabel">Язык:</label>
+      <select id="languageSelect">
+        <option value="ru">Русский</option>
+        <option value="uz">O‘zbek</option>
+        <option value="tg">Тоҷикӣ</option>
+        <option value="ky">Кыргызча</option>
+        <option value="hy">Հայերեն</option>
+        <option value="az">Azərbaycan</option>
+        <option value="en">English</option>
+        <option value="uk">Українська</option>
+        <option value="kk">Қазақ</option>
+        <option value="zh">中文</option>
+      </select>
+    </div>
+  </div>
+
+  <script type="module" src="assets/js/modules/languageManager.js"></script>
+  <script type="module" src="assets/js/modules/auth.js"></script>
+</body>
+</html>

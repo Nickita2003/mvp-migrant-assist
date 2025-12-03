@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="aboutTitle">О проекте</title>
+  <link rel="stylesheet" href="assets/css/page.css" />
+</head>
+<body>
+  <header>
+    <a href="dashboard.html" class="back-btn">&larr; <span data-i18n="backToMain">Назад</span></a>
+    <h1 data-i18n="aboutTitle">О проекте</h1>
+    <div class="lang-switcher">
+      <select id="languageSelect">
+        <option value="ru">Русский</option>
+        <option value="uz">O‘zbek</option>
+        <option value="tg">Тоҷикӣ</option>
+        <option value="ky">Кыргызча</option>
+        <option value="hy">Հայերեն</option>
+        <option value="az">Azərbaycan</option>
+        <option value="en">English</option>
+        <option value="uk">Українська</option>
+        <option value="kk">Қазақ</option>
+        <option value="zh">中文</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <p data-i18n="aboutIntro">MigrantHub — ваш надёжный помощник в России.</p>
+    <div class="about-content">
+      <p data-i18n="aboutText">Мы помогаем мигрантам легально работать, находить жильё и интегрироваться в общество.</p>
+    </div>
+  </main>
+
+  <script type="module" src="assets/js/modules/languageManager.js"></script>
+  <script type="module">
+    document.getElementById('languageSelect').addEventListener('change', (e) => {
+      window.switchLanguage(e.target.value);
+    });
+  </script>
+</body>
+</html>
