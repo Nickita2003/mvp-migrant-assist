@@ -32,7 +32,20 @@
     </div>
   </div>
 
-  <script type="module" src="assets/js/modules/languageManager.js"></script>
   <script type="module" src="assets/js/modules/auth.js"></script>
+  <script type="module">
+    import { initLanguage, switchLanguage } from './assets/js/modules/languageManager.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await initLanguage();
+
+      const select = document.getElementById('languageSelect');
+      if (select) {
+        select.addEventListener('change', (e) => {
+          switchLanguage(e.target.value);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
