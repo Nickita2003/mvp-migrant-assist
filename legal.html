@@ -42,10 +42,22 @@
     </div>
   </main>
 
-  <script type="module" src="assets/js/modules/languageManager.js"></script>
   <script type="module">
-    document.getElementById('languageSelect').addEventListener('change', (e) => {
-      window.switchLanguage(e.target.value);
+    import { initLanguage, switchLanguage } from './assets/js/modules/languageManager.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!localStorage.getItem('isLoggedIn')) {
+        window.location.href = 'auth.html';
+      }
+
+      await initLanguage();
+
+      const select = document.getElementById('languageSelect');
+      if (select) {
+        select.addEventListener('change', (e) => {
+          switchLanguage(e.target.value);
+        });
+      }
     });
   </script>
 </body>
