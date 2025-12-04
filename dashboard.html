@@ -37,7 +37,6 @@
       <a href="contacts.html" class="service-card" data-i18n="contactsCard">Контакты</a>
     </div>
 
-    <!-- Голосовой ассистент -->
     <div class="voice-assistant">
       <button id="voiceBtn" data-i18n="voiceAssistantBtn">Голосовой помощник</button>
       <div id="voiceOutput" class="voice-output"></div>
@@ -49,20 +48,29 @@
     <button id="logoutBtn" data-i18n="logoutButton">Выйти</button>
   </footer>
 
-  <script type="module" src="assets/js/modules/languageManager.js"></script>
   <script type="module" src="assets/js/modules/voiceAssistant.js"></script>
   <script type="module">
-    if (!localStorage.getItem('isLoggedIn')) {
-      window.location.href = 'auth.html';
-    }
+    import { initLanguage, switchLanguage } from './assets/js/modules/languageManager.js';
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('isLoggedIn');
-      window.location.href = 'auth.html';
-    });
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Защита маршрута
+      if (!localStorage.getItem('isLoggedIn')) {
+        window.location.href = 'auth.html';
+      }
 
-    document.getElementById('languageSelect').addEventListener('change', (e) => {
-      window.switchLanguage(e.target.value);
+      await initLanguage();
+
+      document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'auth.html';
+      });
+
+      const select = document.getElementById('languageSelect');
+      if (select) {
+        select.addEventListener('change', (e) => {
+          switchLanguage(e.target.value);
+        });
+      }
     });
   </script>
 </body>
