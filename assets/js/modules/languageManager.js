@@ -1,67 +1,66 @@
 // assets/js/modules/languageManager.js
-const SUPPORTED_LANGUAGES = ['ru', 'uz', 'tg', 'ky', 'hy', 'az', 'en', 'uk', 'kk', 'zh'];
-let currentLang = localStorage.getItem('userLang') || 'ru';
 
-// Экспортируем функцию для внешнего вызова
-window.switchLanguage = async function(lang) {
-  if (!SUPPORTED_LANGUAGES.includes(lang)) return;
-  currentLang = lang;
-  localStorage.setItem('userLang', lang);
-  const translations = await loadTranslations(lang);
-  applyTranslations(translations);
-};
+const SUPPORTED_LANGS = ['ru', 'en', 'uz', 'tg', 'ky', 'hy', 'az', 'uk', 'kk', 'zh'];
+let currentLang = 'ru';
 
 async function loadTranslations(lang) {
   try {
-    const response = await fetch(`../assets/js/i18n/${lang}.json`);
-    if (!response.ok) throw new Error('Not found');
+    const response = await fetch(`assets/i18n/${lang}.json`);
+    if (!response.ok) throw new Error(`404: ${lang}.json not found`);
     return await response.json();
-  } catch (err) {
-    console.warn(`Fallback to ru for ${lang}`);
-    const resp = await fetch('../assets/js/i18n/ru.json');
-    return await resp.json();
+  } catch (error) {
+    console.warn(`⚠️ Файл перевода не найден для "${lang}". Используется русский.`);
+    try {
+      const fallback = await fetch(`assets/i18n/ru.json`);
+      return await fallback.json();
+    } catch (fallbackError) {
+      console.error('❌ Не удалось загрузить даже русский перевод:', fallbackError);
+      return {};
+    }
   }
 }
 
 function applyTranslations(translations) {
-  // Обычный текст
+  const titleEl = document.querySelector('title[data-i18n]');
+  if (titleEl) {
+    const key = titleEl.getAttribute('data-i18n');
+    if (translations[key]) document.title = translations[key];
+  }
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[key]) {
+    if (!key || !translations[key]) return;
+
+    if (el.hasAttribute('data-i18n-placeholder')) {
+      el.placeholder = translations[key];
+    } else if ((el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') && !el.placeholder) {
+      el.placeholder = translations[key];
+    } else {
       el.textContent = translations[key];
     }
   });
 
-  // Placeholder
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (translations[key]) {
-      el.placeholder = translations[key];
-    }
-  });
-
-  // Атрибут title
-  document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    const key = el.getAttribute('data-i18n-title');
-    if (translations[key]) {
-      el.title = translations[key];
-    }
-  });
-
-  // Обновляем язык HTML и заголовок
   document.documentElement.lang = currentLang;
-  if (translations.pageTitle) document.title = translations.pageTitle;
-  if (translations.dashboardTitle) document.title = translations.dashboardTitle;
 }
 
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', async () => {
-  // Устанавливаем выбранный язык в селект
-  const select = document.getElementById('languageSelect');
-  if (select) {
-    select.value = currentLang;
-  }
-
-  const translations = await loadTranslations(currentLang);
+export async function switchLanguage(lang) {
+  if (!SUPPORTED_LANGS.includes(lang)) lang = 'ru';
+  currentLang = lang;
+  localStorage.setItem('selectedLanguage', lang);
+  const translations = await loadTranslations(lang);
   applyTranslations(translations);
-});
+}
+
+export async function initLanguage() {
+  let lang = localStorage.getItem('selectedLanguage');
+  if (!lang) {
+    const browserLang = navigator.language.split('-')[0];
+    lang = SUPPORTED_LANGS.includes(browserLang) ? browserLang : 'ru';
+  }
+  if (!SUPPORTED_LANGS.includes(lang)) lang = 'ru';
+
+  const select = document.getElementById('languageSelect');
+  if (select) select.value = lang;
+
+  await switchLanguage(lang);
+}
